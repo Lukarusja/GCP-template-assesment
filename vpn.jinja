@@ -1,0 +1,53 @@
+# I took this code from here https://github.com/GoogleCloudPlatform/deploymentmanager-samples/blob/master/google/resource-snippets/compute-v1/vpn_tunnel.jinja on 12.04.2021
+# Just deleted the variables from the top and changed the way of naming resources
+# Also, I got rid of compute-v1:routes
+
+resources:
+- name: {{ name }}-vpn-gateway
+  type: gcp-types/compute-v1:targetVpnGateways
+  properties:
+    network: {{ properties["network"] }}
+    region: {{ properties["region"] }}
+    
+- name: {{ name }}-ip
+  type: gcp-types/compute-v1:addresses
+  properties:
+    region: {{ properties["region"] }}
+    
+- name: {{ name }}-esp-rule
+  type: gcp-types/compute-v1:forwardingRules
+  properties:
+    IPProtocol: ESP
+    IPAddress: $(ref.{{ name }}-ip.address)
+    region: {{ properties["region"] }}
+    target: $(ref.{{ name }}-vpn-gateway.selfLink)
+    
+- name: {{ name }}-vpn-udp500-rule
+  type: gcp-types/compute-v1:forwardingRules
+  properties:
+    IPProtocol: UDP
+    IPAddress: $(ref.{{ name }}-ip.address)
+    portRange: 500
+    region: {{ properties["region"] }}
+    target: $(ref.{{ name }}-vpn-gateway.selfLink)
+    
+- name: {{ name }}-vpn-udp4500-rule
+  type: gcp-types/compute-v1:forwardingRules
+  properties:
+    IPProtocol: UDP
+    IPAddress: $(ref.{{ name }}-ip.address)
+    portRange: 4500
+    region: {{ properties["region"] }}
+    target: $(ref.{{ name }}-vpn-gateway.selfLink)
+    
+- name: {{ name }}-vpn-tunnel
+  type: gcp-types/compute-v1:vpnTunnels
+  properties:
+    region: {{ properties["region"] }}
+    ikeVersion: 2
+    sharedSecret: {{ properties["sharedSecret"] }}
+    peerIp: {{ properties["peerIp"] }}
+    targetVpnGateway: $(ref.{{ name }}-vpn-gateway.selfLink)
+    description: Deploy after $(ref.{{ name }}-esp-rule.selfLink), $(ref.{{ name }}-vpn-udp500-rule.selfLink) and $(ref.{{ name }}-vpn-udp4500-rule.selfLink)
+    localTrafficSelector:
+    - 192.168.0.0/16

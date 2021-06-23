@@ -1,0 +1,6 @@
+# This is a simple template for creating networks in GCP
+resources:
+- name: {{ name }}
+  type: compute.v1.network
+  properties:
+    autoCreateSubnetworks: false

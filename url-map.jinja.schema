@@ -1,0 +1,15 @@
+info:
+  title: URL Map template
+  author: Wladyslaw Bielski
+  description:  This template is for URL Maps which allow traffic from https proxy to backend services.
+
+imports:
+  - path: url-map.jinja
+
+required:
+  - defaultService
+
+properties:
+  defaultService:
+    type: string
+    description: The backend service to which the traffic will be allowed

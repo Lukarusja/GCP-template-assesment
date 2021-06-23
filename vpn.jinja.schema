@@ -1,0 +1,28 @@
+info:
+  title: VPN Service
+  author: Wladyslaw Bielski
+  description: A template that creates VPNs. I slightly edited the code from here https://github.com/GoogleCloudPlatform/deploymentmanager-samples/blob/master/google/resource-snippets/compute-v1/vpn_tunnel.jinja on 12.04.2021
+
+imports:
+  - path: vpn.jinja
+
+required:
+  - network
+  - region
+  - sharedSecret
+  - peerIp
+
+
+properties:
+  network:
+    description: The network the VPN has to be applied to
+    type: string
+  region:
+    description: The region the VPN has to be deployed in
+    type: string
+  sharedSecret:
+    description: The shared secret key, I generated mine from https://www.pskgen.com/ on 12.04.2021
+    type: string  
+  peerIP:
+    description: IP address of the peer VPN gateway. In the example deployment I used mine actual IP which I had at the time.
+    type: string

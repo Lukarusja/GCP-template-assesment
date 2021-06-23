@@ -1,0 +1,31 @@
+info:
+  title: SQL template
+  author: Wladyslaw Bielski
+  description: A template that creates SQL instances.
+
+imports:
+  - path: sql.jinja
+
+required:
+  - tier
+  - region
+  - databaseVersion
+  - dataDiskSizeGb
+  - network
+
+properties:
+  tier:
+    description: The tier of the SQL instance
+    type: string
+  region:
+    description: The region the SQL instance has to be deployed in
+    type: string
+  databaseVersion:
+    description: The version of the database engine, type and version.
+    type: string 
+  dataDiskSizeGb:
+    description: Size of the instance in gigabytes.
+    type: integer
+  network:
+    description: The network in which the IP address of the database is supposed to be.
+    type: string 

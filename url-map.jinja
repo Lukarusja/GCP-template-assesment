@@ -1,0 +1,6 @@
+# To allow direct traffic to the actual destination, I have created a URL map.
+resources:
+  - name: {{ name }}
+    type: compute.v1.urlMap
+    properties:
+      defaultService: $(ref.{{ properties["defaultService"] }}.selfLink)

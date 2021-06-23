@@ -1,0 +1,23 @@
+# This is a template for the backend service 
+resources:
+
+# This just creates an httpHealthCheck instance, that is needed by the backendService
+  - name: {{name}}-hc
+    type: compute.v1.httpHealthCheck
+
+
+# This is were the actual backendService is created
+# I added a 'for' loop, so that you can assign it to multiple instance groups at once
+  - name: {{ name }}
+    type: compute.v1.backendService
+    properties:
+      backends:
+      {% for i in range (properties['group'] | length) %}
+        - name: {{ name }}-bes{{i}}
+          group: $(ref.{{ properties['group'][i]}}.instanceGroup)
+       {% endfor %}
+      healthChecks:
+        - $(ref.{{name}}-hc.selfLink)
+      loadBalancingScheme: EXTERNAL
+      portName: http
+      protocol: HTTP

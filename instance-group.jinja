@@ -1,0 +1,13 @@
+# This is a template for creating instance groups.
+# Thanks to them we can manage multiple VMs as a single instance and also we need it to be the target for the load balancer
+resources:
+  - name: {{ name }}
+    type: compute.v1.instanceGroupManager
+    properties:
+      zone: {{ properties["zone"] }}
+      targetSize: {{ properties["size"] }}
+      baseInstanceName: igm-instance-{{ properties["zone"] }}-main
+      instanceTemplate: $(ref.{{ properties["instanceTemplate"] }}.selfLink)
+      namedPorts:
+      - name: http
+        port: 80

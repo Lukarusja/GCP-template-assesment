@@ -1,0 +1,23 @@
+info:
+  title: Bucket Storage
+  author: Wladyslaw Bielski
+  description: Storage bucket template which allows for easy change of storageClass needed for the situation.
+
+imports:
+  - path: bucket-storage.jinja
+
+required:
+  - location
+  - network
+  - storageClass
+
+properties:
+  location:
+    type: string
+    description: The location where the bucket will be created
+  network:
+    type: string
+    description: The network in which the bucket will be created
+  storageClass:
+    type: string
+    description: The storage class, standard for data that needs quick access, nearline for data semi-frequently used, coldline for hardly-ever used data, and archive for data that is almost never used

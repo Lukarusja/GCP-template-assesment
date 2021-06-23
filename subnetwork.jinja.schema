@@ -1,0 +1,23 @@
+info:
+  title: Subnet Template
+  author: Wladyslaw Bielski
+  description:  This template creates subnets.
+
+imports:
+  - path: subnetwork.jinja
+
+required:
+  - ipCidrRange
+  - network
+  - region
+
+properties:
+  ipCidrRange:
+    type: string
+    description: The IP range that will be used in this subnet
+  network:
+    type: string
+    description: The network of which this subnetwork will be a subnetwork of.
+  region:
+    type: string
+    description: The region of the subnet

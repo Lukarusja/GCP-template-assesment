@@ -1,0 +1,140 @@
+
+imports:
+- path: bucket-storage.jinja
+- path: management-vm.jinja
+- path: instance-group.jinja
+- path: instance-template.jinja
+- path: instance-autoscaler.jinja
+- path: backend-service.jinja
+- path: firewall.jinja
+- path: network.jinja
+- path: url-map.jinja
+- path: https-proxy.jinja
+- path: subnetwork.jinja
+- path: sql.jinja
+- path: vpn.jinja
+
+resources:
+- name: network-main
+  type: network.jinja
+
+- name: network-subnet-uk
+  type: subnetwork.jinja
+  properties:
+    ipCidrRange: 10.10.0.0/16
+    network: network-main
+    region: europe-west2
+
+- name: network-subnet-us
+  type: subnetwork.jinja
+  properties:
+    ipCidrRange: 20.20.0.0/16
+    network: network-main
+    region: us-central1
+
+- name: management-vm
+  type: management-vm.jinja
+  properties:
+    machineType: n2-standard-2
+    network: network-main
+    zone: europe-west2-a
+    subnetwork: network-subnet-uk
+
+
+- name: instance-template-uk-network
+  type: instance-template.jinja
+  properties:
+    machineType: n2-standard-2
+    network: network-main
+    subnetwork: network-subnet-uk
+
+- name: instance-template-us-network
+  type: instance-template.jinja
+  properties:
+    machineType: n2-standard-2
+    network: network-main
+    subnetwork: network-subnet-us
+
+
+- name: instance-group-uk
+  type: instance-group.jinja
+  properties:
+    zone: europe-west2-a
+    size: 2
+    instanceTemplate: instance-template-uk-network
+
+- name: instance-group-us
+  type: instance-group.jinja
+  properties:
+    zone: us-central1-a
+    size: 2
+    instanceTemplate: instance-template-us-network
+
+
+- name: autoscaler-uk
+  type: instance-autoscaler.jinja
+  properties:
+    zone: europe-west2-a
+    maxSize: 4
+    target: instance-group-uk
+
+- name: autoscaler-us
+  type: instance-autoscaler.jinja
+  properties:
+    zone: us-central1-a
+    maxSize: 4
+    target: instance-group-us
+
+
+- name: firewall
+  type: firewall.jinja
+  properties:
+    network: $(ref.network-main.selfLink)
+
+- name: backend-service
+  type: backend-service.jinja
+  properties:
+    group:
+       - instance-group-uk
+       - instance-group-us
+
+- name: url-map
+  type: url-map.jinja
+  properties:
+    defaultService: backend-service
+
+- name: https-proxy-main
+  type: https-proxy.jinja
+  properties:
+    urlMap: url-map
+
+- name: bucket-storage-uk
+  type: bucket-storage.jinja
+  properties:
+    location: europe-west2
+    network: network-main
+    storageClass: STANDARD
+
+- name: bucket-storage-us
+  type: bucket-storage.jinja
+  properties:
+    location: us-central1
+    network: network-main
+    storageClass: STANDARD
+
+- name: vpn-for-network-main
+  type: vpn.jinja
+  properties:
+    network: $(ref.network-main.selfLink)
+    region: europe-west2
+    sharedSecret: bB8u6Tj60uJL2RKYR0OCyiGMdds9gaEUs9Q2d3bRTTVRKJ516CCc1LeSMChAI0rc
+    peerIp: 185.169.233.209
+
+- name: sql-instance-for-uk
+  type: sql.jinja
+  properties:
+    tier: db-custom-1-3840
+    region: europe-west2
+    databaseVersion: SQLSERVER_2017_STANDARD
+    dataDiskSizeGb: 32
+    network: network-main

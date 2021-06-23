@@ -1,0 +1,15 @@
+info:
+  title: Firewall template
+  author: Wladyslaw Bielski
+  description:  Firewall that has a health check and allows for ssl traffic to machines with "ssl" tag and also allows http traffic to everything in the network it's attached to.
+
+imports:
+  - path: firewall.jinja
+
+required:
+  - network
+
+properties:
+  network:
+    type: string
+    description: The network to which the firewall is to be added

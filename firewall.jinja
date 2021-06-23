@@ -1,0 +1,50 @@
+
+resources:
+# This is a firewall rule that allows SSH connection to the resources with the SSH tag
+# Currently, the only resource with that tag is the management VM
+  - name: {{ name }}-allow-ssh
+    type: compute.v1.firewall
+    properties:
+      targetTags: ["ssh"]
+      network: {{ properties["network"] }}
+      sourceRanges:
+        - 0.0.0.0/0
+      allowed:
+      - IPProtocol: tcp
+        ports:
+          - 22
+
+# This is a firewall rule that allows the health check IP addresses access the resources:
+# I took the source ranges from here https://github.com/GoogleCloudPlatform/deploymentmanager-samples/blob/master/examples/v2/internal_lb/python/internal_lb.py on 12.04.2021
+  - name: {{ name }}-allow-healthcheck
+    type: compute.v1.firewall
+    properties:
+      network: {{ properties["network"] }}
+      sourceRanges:
+        - 35.191.0.0/16
+        - 130.211.0.0/22
+      allowed:
+        - IPProtocol: tcp
+          ports:
+            - 80
+
+# This is a firewall rule that allows http access
+# I took it from this Qwiklab https://google.qwiklabs.com/focuses/6430?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=3683751 on 12.04.2021
+  - name: {{ name }}-allow-http
+    type: compute.v1.firewall
+    properties:
+      network: {{ properties["network"] }}
+      sourceRanges:
+        - 0.0.0.0/0
+      allowed:
+        - IPProtocol: tcp
+          ports:
+            - 80
+
+# This rule allows icmp access
+  - name: {{name}}-allow-icmp
+    type: compute.v1.firewall
+    properties:
+      network: {{ properties["network"] }}
+      allowed:
+      - IPProtocol: icmp

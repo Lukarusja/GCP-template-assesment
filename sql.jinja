@@ -1,0 +1,19 @@
+resources:
+
+- name: {{ name }}-globaladd
+  type: compute.v1.globalAddress
+  properties:
+    networkInterfaces:
+      - network: $(ref.{{ properties["network"] }}.selfLink)
+
+- name: {{name}}
+  type: sqladmin.v1beta4.instance
+  properties:
+    region: {{ properties['region'] }}
+    IPAddresses: $(ref.{{ name }}-globaladd.selfLink)
+    databaseVersion: {{ properties['databaseVersion'] }}
+    rootPassword: {{name}}-qwerty
+    settings:
+      tier: {{ properties['tier'] }}
+      dataDiskSizeGb: {{ properties['dataDiskSizeGb'] }}
+      availabilityType: REGIONAL

@@ -1,0 +1,30 @@
+# Instance template for VMs that will be used by the instance group manager
+# Also, there's a simple script just so that I could check if the network is configured correctly 
+resources:
+- name: {{ name }}
+  type: compute.v1.instanceTemplate
+  properties:
+    properties:
+      machineType: {{ properties["machineType"] }}
+      disks:
+      - deviceName: boot
+        boot: true
+        autoDelete: true
+        mode: READ_WRITE
+        type: PERSISTENT
+        initializeParams:
+          sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/family/debian-9
+      metadata:
+        items:
+        - key: startup-script
+          value: |
+            sudo apt-get update
+            sudo apt-get install apache2 -y
+            sudo service apache2 restart
+            echo "host:`hostname`" | sudo tee /var/www/html/index.html
+      networkInterfaces:
+      - accessConfigs:
+          - name: external-nat
+            type: ONE_TO_ONE_NAT
+        network: $(ref.{{ properties["network"] }}.selfLink)
+        subnetwork: $(ref.{{ properties["subnetwork"] }}.selfLink)

@@ -1,0 +1,15 @@
+info:
+  title: HTTPS Proxy template
+  author: Wladyslaw Bielski
+  description:  Https proxy which routes requests to a URL map. This template also creates an SSL certificate, a global ip address and a forwarding rule.
+
+imports:
+  - path: https-proxy.jinja
+
+required:
+  - urlMap
+
+properties:
+  urlMap:
+    type: string
+    description: The URL map used to map the HTTPS proxy to the backend service

@@ -1,0 +1,23 @@
+info:
+  title: Instance Template 
+  author: Wladyslaw Bielski
+  description:  This template is used by instance groups to create new VMs.
+
+imports:
+  - path: instance-template.jinja
+
+required:
+  - machineType
+  - network
+  - subnetwork
+
+properties:
+  machineType:
+    type: string
+    description: Type of the machine to create 
+  network:
+    type: string
+    description: The network to which the instances have to be attached
+  subnetwork:
+    type: string
+    description: The subnetwork to which the instances have to be attached

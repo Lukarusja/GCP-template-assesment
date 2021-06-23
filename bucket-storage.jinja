@@ -1,0 +1,14 @@
+# Deploying bucket storage for, well, storage
+# I took the code from here https://github.com/GoogleCloudPlatform/deploymentmanager-samples/blob/master/google/resource-snippets/storage-v1/bucket.jinja on 12.04.2021
+# I didn't take the whole thing, just the bits I needed and changed the storageClass to use enviromental properties
+ resources:
+  - name: {{ name }}
+    type: storage.v1.bucket
+    properties:
+        predefinedAcl: projectPrivate
+        projection: full
+        location: {{ properties["location"] }}
+        storageClass: {{ properties["storageClass"] }}
+        networkInterfaces:
+        - network: $(ref.{{ properties["network"] }}.selfLink)
+

@@ -1,0 +1,23 @@
+info:
+  title: Instance Group template
+  author: Wladyslaw Bielski
+  description:  This allows for multiple VMs be managed as a single instance and also an instance group can be the target for a load balancer. 
+
+imports:
+  - path: instance-group.jinja
+
+required:
+  - zone
+  - size
+  - instanceTemplate
+
+properties:
+  zone:
+    type: string
+    description: The zone in which the instance group will be created
+  size:
+    type: integer
+    description: The starting amount of VMs in an instance group 
+  instanceTemplate:
+    type: string
+    description: The template that has to be used when creating the VMs for the instance groups 

@@ -1,0 +1,16 @@
+info:
+  title: Backend Service
+  author: Wladyslaw Bielski
+  description: A backend service with the option to assign it to multiple instance groups at once.
+
+imports:
+  - path: backend-service.jinja
+
+required:
+  - group
+
+
+properties:
+  group:
+    description: a list of all groups to be added to the backend service
+    type: array

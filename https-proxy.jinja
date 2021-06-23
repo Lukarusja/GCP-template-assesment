@@ -1,0 +1,80 @@
+# This is a https proxy template
+# It securely routes requests to a URL map
+resources:
+
+# I created a self-signed SSL certificate using this site https://en.rakko.tools/tools/46/ on 12.04.2021
+  - name: {{ name }}-sslcert
+    type: compute.v1.sslCertificate
+    properties:
+      certificate: |
+        -----BEGIN CERTIFICATE-----
+        MIIDcjCCAlqgAwIBAgIEGgi/EjANBgkqhkiG9w0BAQsFADBSMQswCQYDVQQGEwJQ
+        TDEOMAwGA1UEAwwFT3RvdG8xDzANBgNVBAgMBldhcnNhdzERMA8GA1UEBwwIV2Fy
+        c3phd2ExDzANBgNVBAoMBkNhbGV0ZTAeFw0yMTA0MTIxNDU4MzdaFw0yMzA0MTIx
+        NDU4MzdaMFIxCzAJBgNVBAYTAlBMMQ4wDAYDVQQDDAVPdG90bzEPMA0GA1UECAwG
+        V2Fyc2F3MREwDwYDVQQHDAhXYXJzemF3YTEPMA0GA1UECgwGQ2FsZXRlMIIBIjAN
+        BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6F1/qePzrW1b6ahCAVsz3H8PtwTB
+        BIGu6bMoy1BwZmR+UY0R1RzmiJh3uZ48Jb/1TNa8X6ISTQl4iFn9oGe5MxNnjvKG
+        yDowxaQlStrR0Z+fkvfBo7nBZQ8siAN4OXX8g9P2Qg43CCuzScAvvaRS1KaHUfPm
+        bwmKykaDNVIzhRIJN3ZJn/pmmPX5ZubEoyn6wqvsLAX3MLGAcF1l9zPO/3A9UwEe
+        ojXlJMv1VIhwWF1irZZnZDN45AgeV7/aMk7E+iwHugm8n66BxwxBGW3bu5nEa1be
+        g/TvCQa9l+/yNHB5pH7zBZQ2r2ll5KaLCf5bA7EeJUHGQ+H9rW6w2aFcxQIDAQAB
+        o1AwTjAdBgNVHQ4EFgQU8U/1JzJkWQzwN9xJP45ZiJTXhJkwHwYDVR0jBBgwFoAU
+        8U/1JzJkWQzwN9xJP45ZiJTXhJkwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsF
+        AAOCAQEAeA3Yh1bNYWi4yI3J8BIc51ZjtiloHRN0IE2ua1yuFu1dC23/89qTu/hq
+        H+yDJodtZBrHU0J4A09MKehVkLeun062Spwcor83gvSDoyrNFCuXNLppDtOidTB3
+        9ExxmtYyQdNliHNbQC5uwo8u7faqAFFCp8cYlZ5XBUMhhLo90tn7qhx4Q91m6HiB
+        WotsAVyHzcxrh6a7JO7LNPc5ic2GbgnXVOk1v4LXUDsL44nMR8MkwNWCumBuptXe
+        aMQCzcW0THESgwYhM39+S7p3OTL1y6LAV3vHUjwhxbG/nA9BTPdsIZYdBSUQAR5M
+        hAka7H+dC+sWY1+b3Kocz0+xUvV94g==
+        -----END CERTIFICATE-----
+      privateKey: |
+        -----BEGIN RSA PRIVATE KEY-----
+        MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDoXX+p4/OtbVvp
+        qEIBWzPcfw+3BMEEga7psyjLUHBmZH5RjRHVHOaImHe5njwlv/VM1rxfohJNCXiI
+        Wf2gZ7kzE2eO8obIOjDFpCVK2tHRn5+S98GjucFlDyyIA3g5dfyD0/ZCDjcIK7NJ
+        wC+9pFLUpodR8+ZvCYrKRoM1UjOFEgk3dkmf+maY9flm5sSjKfrCq+wsBfcwsYBw
+        XWX3M87/cD1TAR6iNeUky/VUiHBYXWKtlmdkM3jkCB5Xv9oyTsT6LAe6CbyfroHH
+        DEEZbdu7mcRrVt6D9O8JBr2X7/I0cHmkfvMFlDavaWXkposJ/lsDsR4lQcZD4f2t
+        brDZoVzFAgMBAAECggEBAL7CE047jw6vGqeltBo870RzI0mSo4q5lAjTRggzTzMg
+        CPuWHi+gfDljQdamaqZrAkxEdXzlJrULs2HszuRigo3FvlyCCdhSvTtj2CGtpla6
+        /lu+/b8Vfgki/eHjR02U6OqoliAAX3lbtuIy3n6HamCdHbZPzrsVUFVisdCSXS09
+        4rg0XQ2jBvmZS3MUu4NxgysctG8tsuqWh6fskSzEi0/aVAcjBtXLTisidfWDMnb2
+        XGfsmohM0SR5iQuyDvVlSafDA/KSz6TdWxIXKlstuSXYlC4Z/XiYVYbYlWgRY9qe
+        28EHxSXLkzhFbydpaayU5HByStcDpF8xqdtYGS8jUPkCgYEA+X2k53YqKIkkwqFL
+        dPDCqtDfCgi/ZiOiDBHrYTURalQkNvLkUPBP6z5MAW1hI+MBFz553/6zZt6n9x8S
+        6CV302ckD7IzuQwMlrsoESYkgR8Alh3gxbpseyfCxygH/hmPMjKpNKOewB89Hgzr
+        wld8xiwx0zKEriY3c2ffnNtbrP8CgYEA7m147qnATyGVQXxNGljlrWRx16RMS4Xk
+        dVtBn2IxDE7FXmeKL1HKs9HYplDpulMAos1xRSEx4IK7SMegE4WXe8Qh5wH9RJqG
+        8IVgU4fKCGbcVno8LDUWiBPdD5X3wEddm9Ye6gu8rwFqKxlmQR4WCqEM8ojsfRmE
+        UT6rVGdZgjsCgYEA9ZyRqSQVIM7Sl6C+biNPIWZ7DJ/L/Tt7HjLN7GaX/HtVI5s+
+        1ceehdJQdN8/UFr8CewBg1h1OQJdjNTUgiHQsxfI0oL2lGeeRQ1+xlMsgMkKhL5p
+        N37tqNhd0j5AkBCNfjeNiDrD4BNg0aKavjnuphGAA5CqOd95m21ZIEx7FfUCgYAS
+        6R/kXhZgsFs0PHWpF0/wNr1Iy0E55D7AiCJmT9VwEndZC4FMS4J2TLiQSG6hVqAA
+        SacoQn/APN454YtywO/I4z+FIQVDgbYeMZX4ShbeH7puKXfIUdWdqWWpLM3ftEla
+        aNs+2Pt4LfaLwJH5rDc3VJrASdfn/DQgdYYFRcU1rQKBgQCiPcIcG/zJihQJHoiu
+        EjDv8MFwMBaJyn3VkOvVtJJ7Dtt99k1G37iZKDG/vfAV5J9geZzN9fQ3TlAUEcCc
+        c0Lm6MQEFduAMYZle2JqU4M/YcY9OxrjoQbkUg7eDgeEjittW5iEeZLpL8+cbgq5
+        THK1qUnPhzEfxUuH31N1Pldu4g==
+        -----END RSA PRIVATE KEY-----
+
+
+  - name: {{ name }}-httpsproxy
+    type: compute.v1.targetHttpsProxy
+    properties:
+      sslCertificates:
+        - $(ref.{{ name }}-sslcert.selfLink)
+      urlMap: $(ref.{{ properties["urlMap"] }}.selfLink)
+
+
+  - name: {{ name }}-globaladd
+    type: compute.v1.globalAddress
+
+  - name: {{ name }}-global-forwarding-rule
+    type: compute.v1.globalForwardingRule
+    properties:
+      IPAddress: $(ref.{{ name }}-globaladd.selfLink)
+      IPProtocol: TCP
+      loadBalancingScheme: EXTERNAL
+      portRange: 443
+      target: $(ref.{{ name }}-httpsproxy.selfLink)

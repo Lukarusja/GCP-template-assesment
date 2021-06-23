@@ -1,0 +1,9 @@
+# This is an autoscaler template, it'll deploy additional VMs to the target groups when the traffic is too big for the current amount of instances to handle
+resources:
+  - name: {{ name }}
+    type: compute.v1.autoscaler
+    properties:
+      zone: {{ properties["zone"] }}
+      target: $(ref.{{ properties["target"] }}.selfLink)
+      autoscalingPolicy:
+        maxNumReplicas: {{ properties["maxSize"] }}

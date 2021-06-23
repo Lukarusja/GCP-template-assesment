@@ -1,0 +1,23 @@
+info:
+  title: Management Virtual Machine template
+  author: Wladyslaw Bielski
+  description:  This template creates the main VM that will be used to manage the rest of the instances. Also, it's the only machine you can connect to via SSL.
+
+imports:
+  - path: management-vm.jinja
+
+required:
+  - zone
+  - network
+  - subnetwork
+
+properties:
+  zone:
+    type: string
+    description: The zone in which the VM will be created
+  network:
+    type: string
+    description: The network to which the VM has to be attached
+  subnetwork:
+    type: string
+    description: The subnetwork to which the VM has to be attached

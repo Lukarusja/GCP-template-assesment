@@ -1,0 +1,23 @@
+info:
+  title: Autoscaler template
+  author: Wladyslaw Bielski
+  description: Allows for deployment of an autoscaler, which will add new VMs if the traffic becomes too heavy to handle. 
+
+imports:
+  - path: instance-autoscaler.jinja
+
+required:
+  - zone
+  - maxSize
+  - target
+
+properties:
+  zone:
+    type: string
+    description: The zone in which the autoscaler will be deployed
+  maxSize:
+    type: integer
+    description: The maximum number of VMs that can be deployed
+  target:
+    type: string
+    description: The instance group to which the autoscaler has to be assigned
